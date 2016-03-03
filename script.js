@@ -26,7 +26,6 @@ var PHASE_RESULTS   = 5;
 var use_websocket_client = false;
 
 var mlabns_url = 'https://mlab-ns.appspot.com/ndt?format=json';
-var default_mlab_server = 'ndt.iupui.mlab1.nuq1t.measurement-lab.org';
 var mlab_server;
 
 var websocket_client = null;
@@ -45,9 +44,6 @@ var gaugeMaxValue = 1000;
 function initializeTest() {
 
   mlab_server = get_server();
-  if (!mlab_server) {
-      mlab_server = default_mlab_server;
-  }
 
   // Initialize gauges
   initializeGauges();
@@ -66,6 +62,11 @@ function initializeTest() {
 }
 
 function startTest(evt) {
+  // Don't start the test unless we have a server from mlab-ns
+  if (!mlab_server) {
+    console.log('Could not find an M-Lab server. Aborting...');
+    return false;
+  }
   evt.stopPropagation();
   evt.preventDefault();
   createBackend();
@@ -580,13 +581,9 @@ function get_server() {
     $.ajax({
         url: mlabns_url,
         dataType: 'json',
-        async: false,
         success: function(resp) {
             console.log('Using M-Lab server: ' + resp.fqdn);
-            return resp.fqdn;
-        },
-        error: function(err) {
-            return false;
+            mlab_server = resp.fqdn;
         }
     });
 }
