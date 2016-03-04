@@ -110,6 +110,7 @@ NDTWrapper.prototype.run_test = function () {
         'cmd': 'start',
         'hostname': this._hostname,
         'port': this._port,
+        'protocol': this._protocol,
         'path': this._path,
         'update_interval': this._update_interval
       });
