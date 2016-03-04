@@ -25,7 +25,8 @@ var PHASE_RESULTS   = 5;
 
 var use_websocket_client = false;
 
-var mlabns_url = 'https://mlab-ns.appspot.com/ndt?format=json';
+var mlabns_url = 'https://mlab-ns.appspot.com/';
+var mlabns_service = 'ndt';
 var mlab_server;
 
 var websocket_client = null;
@@ -43,7 +44,11 @@ var gaugeMaxValue = 1000;
 
 function initializeTest() {
 
-  mlab_server = get_server();
+  if ('https:' == document.location.protocol) {
+	mlabns_service = 'ndt_ssl';
+  }
+   
+  mlab_server = get_server(mlabns_service);
 
   // Initialize gauges
   initializeGauges();
@@ -577,9 +582,9 @@ function createBackend() {
 
 // UTILITIES
 
-function get_server() {
+function get_server(service) {
     $.ajax({
-        url: mlabns_url,
+        url: mlabns_url + service,
         dataType: 'json',
         success: function(resp) {
             console.log('Using M-Lab server: ' + resp.fqdn);
