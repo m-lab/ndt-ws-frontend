@@ -597,21 +597,8 @@ function debug(message) {
   if (allowDebug && window.console) console.debug(message);
 }
 
-function isPluginLoaded() {
-  try {
-    testStatus();
-    return true;
-  } catch(e) {
-    return false;
-  }
-}
-
 function checkInstalledPlugins() {
-  var hasJava = false;
   var hasWebsockets = false;
-
-  $('#warning-plugin').hide();
-  $('#warning-websocket').hide();
 
   hasWebsockets = false;
   try {
